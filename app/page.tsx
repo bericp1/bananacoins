@@ -1,7 +1,7 @@
 "use client";
-import { CupGrid } from "@/components/CupGrid";
+import { CupGrid } from "@/components/cups/CupGrid";
 import { PlayerGrid } from "@/components/players/PlayerGrid";
-import { ScoreGrid } from "@/components/ScoreGrid";
+import { ScoreGrid } from "@/components/scores/ScoreGrid";
 import { usePlayersAndScores } from "@/hooks/usePlayersAndScores";
 import { useCups } from "@/hooks/cups/useCups";
 
