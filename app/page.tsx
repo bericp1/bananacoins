@@ -1,9 +1,9 @@
 "use client";
 import { CupGrid } from "@/components/CupGrid";
-import { PlayerGrid } from "@/app/components/players/PlayerGrid";
+import { PlayerGrid } from "@/components/players/PlayerGrid";
 import { ScoreGrid } from "@/components/ScoreGrid";
-import { usePlayersAndScores } from "./hooks/usePlayersAndScores";
-import { useCups } from "./hooks/useCups";
+import { usePlayersAndScores } from "@/hooks/usePlayersAndScores";
+import { useCups } from "@/hooks/cups/useCups";
 
 export default function Home() {
   const {

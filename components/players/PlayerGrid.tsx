@@ -1,5 +1,5 @@
 "use client";
-import { Player } from "@/app/lib/types";
+import { Player } from "@/lib/players";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,8 +11,8 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PlayerCard } from "@/components/PlayerCard";
-import { AverageScoreCard } from "@/components/AverageScoreCard";
+import { PlayerCard } from "./PlayerCard";
+import { AverageScoreCard } from "./AverageScoreCard";
 import {
   Tooltip,
   TooltipContent,

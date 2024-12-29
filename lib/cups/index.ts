@@ -1,4 +1,14 @@
-import { StaticCup } from "../lib/types";
+export type StaticCup = {
+  name: string;
+  cup: string;
+  icon: string;
+};
+
+export type Cup = StaticCup & {
+  round: number | null;
+  created_at: string;
+  updated_at: string;
+};
 
 export const cups: StaticCup[] = [
   { name: "Mushroom Cup", cup: "mushroom", icon: "🍄" },

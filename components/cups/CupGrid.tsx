@@ -1,5 +1,5 @@
 "use client";
-import { Cup } from "@/app/lib/types";
+import { Cup } from "@/lib/cups";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

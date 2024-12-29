@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Player } from "@/app/lib/types";
+import { Player } from "@/lib/players";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

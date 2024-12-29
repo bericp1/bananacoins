@@ -1,20 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { supabase } from "@/app/lib/supabase";
-import { Player } from "@/app/lib/types";
-
-interface Score {
-  player: string;
-  round: number;
-  score: number;
-}
-
-export interface PlayerScore {
-  uuid: string;
-  name: string;
-  averageScore: number;
-  scores: { [round: number]: number };
-}
+import { supabase } from "@/lib/supabase";
+import { Player } from "@/lib/players";
+import { Score, PlayerScore } from "@/lib/scores";
 
 export function usePlayersAndScores() {
   const [players, setPlayers] = useState<Player[]>([]);

@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { supabase } from "@/app/lib/supabase";
-import { cups as initialCups } from "@/app/constants/cups";
-import { Cup } from "@/app/lib/types";
+import { supabase } from "@/lib/supabase";
+import { cups as initialCups, Cup } from "@/lib/cups";
 
 export function useCups() {
   const [cups, setCups] = useState<Cup[]>([]);

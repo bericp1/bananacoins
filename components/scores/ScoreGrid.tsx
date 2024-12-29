@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
   Table,
   TableBody,
@@ -14,8 +13,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { PlayerScore } from "@/app/hooks/usePlayersAndScores";
-import { Cup } from "@/app/lib/types";
+import { PlayerScore } from "@/lib/scores";
+import { Cup } from "@/lib/cups";
 
 interface ScoreGridProps {
   playerScores: PlayerScore[];
