@@ -1,6 +1,6 @@
-'use client';
-import { Cup } from '@/app/lib/types'
-import { Button } from '@/components/ui/button'
+"use client";
+import { Cup } from "@/app/lib/types";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,13 +9,13 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
 const pulsingBorderKeyframes = `
   @keyframes pulse-border {
@@ -70,7 +70,7 @@ export function CupGrid({
   confirmResetCup,
   resetAllCups,
 }: CupGridProps) {
-  const maxRound = Math.max(...cups.map(cup => cup.round || 0))
+  const maxRound = Math.max(...cups.map((cup) => cup.round || 0));
 
   return (
     <>
@@ -84,13 +84,17 @@ export function CupGrid({
                 <Button
                   onClick={selectRandomCup}
                   className="text-xl py-3 px-6"
-                  disabled={cups.every(cup => cup.round !== null)}
+                  disabled={cups.every((cup) => cup.round !== null)}
                 >
                   Select Random Cup
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{cups.every(cup => cup.round !== null) ? 'All cups have been played' : 'Select a random unplayed cup'}</p>
+                <p>
+                  {cups.every((cup) => cup.round !== null)
+                    ? "All cups have been played"
+                    : "Select a random unplayed cup"}
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -108,22 +112,28 @@ export function CupGrid({
                         <div
                           className={`
                             p-4 rounded-lg flex flex-col items-center justify-center cursor-pointer
-                            ${isPlayed ? 'bg-white' : 'bg-gray-200 opacity-50'}
-                            ${isActive ? 'animate-pulse-border' : ''}
+                            ${isPlayed ? "bg-white" : "bg-gray-200 opacity-50"}
+                            ${isActive ? "animate-pulse-border" : ""}
                           `}
                           onClick={() => toggleCup(cup)}
                         >
                           <span className="text-4xl mb-2">{cup.icon}</span>
-                          <span className="text-center text-sm">{cup.name}</span>
-                          {isPlayed && <span className="text-xs mt-1">Round {cup.round}</span>}
+                          <span className="text-center text-sm">
+                            {cup.name}
+                          </span>
+                          {isPlayed && (
+                            <span className="text-xs mt-1">
+                              Round {cup.round}
+                            </span>
+                          )}
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
                         {isPlayed && cup.round !== maxRound
                           ? "This cup can't be removed because it has scores associated with it."
                           : isPlayed
-                          ? "Click to mark as unplayed"
-                          : "Click to assign to next round"}
+                            ? "Click to mark as unplayed"
+                            : "Click to assign to next round"}
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -143,21 +153,30 @@ export function CupGrid({
               <DialogHeader>
                 <DialogTitle>Reset All Cups</DialogTitle>
                 <DialogDescription>
-                  Are you sure you want to reset all cups? This action cannot be undone.
+                  Are you sure you want to reset all cups? This action cannot be
+                  undone.
                   <span className="block mt-2 font-bold text-yellow-600">
                     Warning: This action will reset the cups for all users.
                   </span>
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsResetDialogOpen(false)}>Cancel</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsResetDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
                 <Button onClick={resetAllCups}>Confirm Reset</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
       </div>
-      <Dialog open={isResetCupDialogOpen} onOpenChange={setIsResetCupDialogOpen}>
+      <Dialog
+        open={isResetCupDialogOpen}
+        onOpenChange={setIsResetCupDialogOpen}
+      >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Reset Cup</DialogTitle>
@@ -169,29 +188,42 @@ export function CupGrid({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsResetCupDialogOpen(false)}>Cancel</Button>
+            <Button
+              variant="outline"
+              onClick={() => setIsResetCupDialogOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button onClick={confirmResetCup}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Dialog open={isAssignCupDialogOpen} onOpenChange={setIsAssignCupDialogOpen}>
+      <Dialog
+        open={isAssignCupDialogOpen}
+        onOpenChange={setIsAssignCupDialogOpen}
+      >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Assign Cup</DialogTitle>
             <DialogDescription>
-              Are you sure you want to assign the {cupToAssign?.name} to the next round?
+              Are you sure you want to assign the {cupToAssign?.name} to the
+              next round?
               <span className="block mt-2 font-bold text-yellow-600">
                 Warning: This action will change the cup status for all users.
               </span>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAssignCupDialogOpen(false)}>Cancel</Button>
+            <Button
+              variant="outline"
+              onClick={() => setIsAssignCupDialogOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button onClick={confirmAssignCup}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-

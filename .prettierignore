@@ -1,0 +1,16 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+/coverage
+/.next/
+/out/
+/build
+.DS_Store
+*.pem
+*.log
+.env*
+.vercel
+*.tsbuildinfo
+next-env.d.ts

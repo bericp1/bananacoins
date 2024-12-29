@@ -1,9 +1,9 @@
-'use client';
-import { CupGrid } from '@/components/CupGrid'
-import { PlayerGrid } from '@/app/components/players/PlayerGrid'
-import { ScoreGrid } from '@/components/ScoreGrid'
-import { usePlayersAndScores } from './hooks/usePlayersAndScores'
-import { useCups } from './hooks/useCups'
+"use client";
+import { CupGrid } from "@/components/CupGrid";
+import { PlayerGrid } from "@/app/components/players/PlayerGrid";
+import { ScoreGrid } from "@/components/ScoreGrid";
+import { usePlayersAndScores } from "./hooks/usePlayersAndScores";
+import { useCups } from "./hooks/useCups";
 
 export default function Home() {
   const {
@@ -27,7 +27,7 @@ export default function Home() {
     confirmAndSaveScores,
     areAllTeamScoresValid,
     teamsWithPlayers,
-  } = usePlayersAndScores()
+  } = usePlayersAndScores();
 
   const {
     cups,
@@ -44,14 +44,15 @@ export default function Home() {
     confirmAssignCup,
     confirmResetCup,
     resetAllCups,
-  } = useCups()
+  } = useCups();
 
   return (
     <>
       <div className="container mt-8 px-6 text-center mx-auto">
         <h1 className="text-4xl font-bold mb-4">MarioKart 8 2024-25</h1>
-          <p className="text-orange-500 font-semibold mb-8">
-          Warning: All selections and changes are visible to everyone using this randomizer.
+        <p className="text-orange-500 font-semibold mb-8">
+          Warning: All selections and changes are visible to everyone using this
+          randomizer.
         </p>
       </div>
       <hr className="my-8 border-t border-gray-300" />
@@ -96,6 +97,5 @@ export default function Home() {
       <hr className="my-8 border-t border-gray-300" />
       <ScoreGrid playerScores={playerScores} cups={cups} />
     </>
-  )
+  );
 }
-
