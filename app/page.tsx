@@ -4,6 +4,7 @@ import { PlayerGrid } from "@/components/players/PlayerGrid";
 import { ScoreGrid } from "@/components/scores/ScoreGrid";
 import { usePlayersAndScores } from "@/hooks/usePlayersAndScores";
 import { useCups } from "@/hooks/cups/useCups";
+import Hero from "@/components/hero/Hero";
 
 export default function Home() {
   const {
@@ -48,11 +49,11 @@ export default function Home() {
 
   return (
     <>
+      <Hero />
       <div className="container mt-8 px-6 text-center mx-auto">
-        <h1 className="text-4xl font-bold mb-4">MarioKart 8 2024-25</h1>
-        <p className="text-orange-500 font-semibold mb-8">
-          Warning: All selections and changes are visible to everyone using this
-          randomizer.
+        <p className="font-semibold mb-8">
+          <span className="text-orange-500">⚡️</span> All selections and
+          changes are visible to everyone in realtime.
         </p>
       </div>
       <hr className="my-8 border-t border-gray-300" />

@@ -83,7 +83,7 @@ export function CupGrid({
               <TooltipTrigger asChild>
                 <Button
                   onClick={selectRandomCup}
-                  className="text-xl py-3 px-6"
+                  className="py-3 px-6"
                   disabled={cups.every((cup) => cup.round !== null)}
                 >
                   Select Random Cup
@@ -100,7 +100,7 @@ export function CupGrid({
           </TooltipProvider>
         </div>
         <div className="overflow-x-auto">
-          <div className="min-w-[600px]">
+          <div className="min-w-[600px] p-4">
             <div className="grid grid-cols-6 gap-4 mb-8">
               {cups.map((cup) => {
                 const isPlayed = cup.round !== null;
@@ -111,7 +111,7 @@ export function CupGrid({
                       <TooltipTrigger asChild>
                         <div
                           className={`
-                            p-4 rounded-lg flex flex-col items-center justify-center cursor-pointer
+                            p-4 rounded-lg flex flex-col items-center justify-center cursor-pointer h-28
                             ${isPlayed ? "bg-white" : "bg-gray-200 opacity-50"}
                             ${isActive ? "animate-pulse-border" : ""}
                           `}
@@ -145,7 +145,7 @@ export function CupGrid({
         <div className="flex justify-center">
           <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="text-xl py-3 px-6">
+              <Button variant="outline" className="py-3 px-6">
                 Reset All Cups
               </Button>
             </DialogTrigger>

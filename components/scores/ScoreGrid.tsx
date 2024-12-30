@@ -55,7 +55,11 @@ export function ScoreGrid({ playerScores, cups }: ScoreGridProps) {
         const rowIndex = row.index;
         if (rowIndex < 3) {
           return (
-            <div className="text-center">{getMedalEmoji(rowIndex + 1)}</div>
+            <div className="text-center">
+              <span className="scale-[1.8] inline-block transition-transform">
+                {getMedalEmoji(rowIndex + 1)}
+              </span>
+            </div>
           );
         }
         return null;
@@ -107,7 +111,10 @@ export function ScoreGrid({ playerScores, cups }: ScoreGridProps) {
 
           return (
             <div className="text-center">
-              {score.toFixed(2)} {getMedalEmoji(place)}
+              {score.toFixed(2)}{" "}
+              <span className="scale-[1.6] inline-block transition-transform">
+                {getMedalEmoji(place)}
+              </span>
             </div>
           );
         },

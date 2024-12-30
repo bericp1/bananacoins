@@ -212,7 +212,7 @@ export function PlayerGrid({
               <span>
                 <Button
                   onClick={confirmAndSaveScores}
-                  className="text-lg py-8 px-3"
+                  className="py-6 px-3"
                   disabled={!areAllTeamScoresValid()}
                 >
                   Confirm and Save Scores for Round
