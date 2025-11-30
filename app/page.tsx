@@ -52,8 +52,8 @@ export default function Home() {
       <Hero />
       <div className="container mt-8 px-6 text-center mx-auto">
         <p className="font-semibold mb-8">
-          <span className="text-orange-500">⚡️</span> All selections and
-          changes are visible to everyone in realtime.
+          <span className="text-orange-500">⚡️</span> All selections and changes
+          are visible to everyone in realtime.
         </p>
       </div>
       <hr className="my-8 border-t border-gray-300" />
