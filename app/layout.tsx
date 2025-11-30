@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MK8 2024-25",
+  title: "MK8 2025-26",
   description: "Mario Kart 8 Cup Randomizer and Player Manager",
 };
 

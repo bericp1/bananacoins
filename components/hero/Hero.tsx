@@ -7,19 +7,19 @@ export default function Hero() {
       {/* Background Image */}
       <Image
         src={hero}
-        alt="Surreal Mario Kart inspired artwork with rainbow tracks and mushrooms"
+        alt="A vibrant cartoon image of six people in go-karts, driving side-by-side towards the viewer on a rainbow track in a whimsical Mario Kart-style world. Each character wears a hat with their name (Joe, Kim, Kristin, Alex, Brandon, Justin)."
         fill
         priority
         className="object-cover"
       />
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gray-900/60" />
+      <div className="absolute inset-0 bg-gray-900/40" />
 
       {/* Content */}
-      <div className="relative z-10 flex items-center justify-center w-full h-full px-4">
+      <div className="relative z-10 flex items-start justify-center w-full h-full px-4 py-18">
         <h1 className="text-4xl md:text-6xl font-bold text-white text-center max-w-4xl">
-          MarioKart 8 <span className="text-nowrap">2024-25</span>
+          MarioKart 8 <span className="text-nowrap">2025-26</span>
         </h1>
       </div>
     </div>
