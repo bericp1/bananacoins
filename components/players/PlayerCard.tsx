@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Player } from "@/lib/players";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +21,7 @@ interface PlayerCardProps {
   setIsDeletePlayerDialogOpen: (isOpen: boolean) => void;
 }
 
-export function PlayerCard({
+function PlayerCardInner({
   player,
   updatePlayerScore,
   resetPlayerTeam,
@@ -30,10 +30,6 @@ export function PlayerCard({
 }: PlayerCardProps) {
   const [localScore, setLocalScore] = useState(player.score.toString());
   const [isValid, setIsValid] = useState(true);
-
-  useEffect(() => {
-    setLocalScore(player.score.toString());
-  }, [player.score]);
 
   const handleScoreChange = (value: string) => {
     setLocalScore(value);
@@ -111,5 +107,14 @@ export function PlayerCard({
         </CardFooter>
       )}
     </Card>
+  );
+}
+
+export function PlayerCard(props: PlayerCardProps) {
+  return (
+    <PlayerCardInner
+      key={`${props.player.uuid}-${props.player.score}`}
+      {...props}
+    />
   );
 }

@@ -3,6 +3,23 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { cups as initialCups, Cup } from "@/lib/cups";
 
+async function fetchCups(): Promise<Cup[]> {
+  const { data, error } = await supabase
+    .from("cups")
+    .select("*")
+    .order("round", { ascending: false, nullsFirst: false });
+
+  if (error) {
+    console.error("Error fetching cups:", error);
+    return [];
+  }
+
+  return initialCups.map((cup) => {
+    const dbCup = data.find((dbCup) => dbCup.cup === cup.cup);
+    return { ...cup, ...dbCup };
+  });
+}
+
 export function useCups() {
   const [cups, setCups] = useState<Cup[]>([]);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
@@ -12,7 +29,7 @@ export function useCups() {
   const [isAssignCupDialogOpen, setIsAssignCupDialogOpen] = useState(false);
 
   useEffect(() => {
-    fetchCups();
+    fetchCups().then((cups) => setCups(cups));
     const cupSubscription = supabase
       .channel("cups")
       .on(
@@ -26,25 +43,6 @@ export function useCups() {
       cupSubscription.unsubscribe();
     };
   }, []);
-
-  const fetchCups = async () => {
-    const { data, error } = await supabase
-      .from("cups")
-      .select("*")
-      .order("round", { ascending: false, nullsFirst: false });
-
-    if (error) {
-      console.error("Error fetching cups:", error);
-      return;
-    }
-
-    const mergedCups = initialCups.map((cup) => {
-      const dbCup = data.find((dbCup) => dbCup.cup === cup.cup);
-      return { ...cup, ...dbCup };
-    });
-
-    setCups(mergedCups);
-  };
 
   const selectRandomCup = async () => {
     const unplayedCups = cups.filter((cup) => cup.round === null);

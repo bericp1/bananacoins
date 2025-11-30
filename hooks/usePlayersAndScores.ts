@@ -16,45 +16,6 @@ export function usePlayersAndScores() {
     new Set(),
   );
 
-  useEffect(() => {
-    fetchPlayers();
-    fetchScores();
-
-    const playerSubscription = supabase
-      .channel("players")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "players" },
-        fetchPlayers,
-      )
-      .subscribe();
-
-    const scoreSubscription = supabase
-      .channel("scores")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "scores" },
-        fetchScores,
-      )
-      .subscribe();
-
-    return () => {
-      playerSubscription.unsubscribe();
-      scoreSubscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    const teams = new Set(
-      players
-        .filter(
-          (player): player is Player & { team: number } => player.team !== null,
-        )
-        .map((player) => player.team),
-    );
-    setTeamsWithPlayers(teams);
-  }, [players]);
-
   const fetchPlayers = async () => {
     const { data, error } = await supabase
       .from("players")
@@ -129,6 +90,45 @@ export function usePlayersAndScores() {
 
     setPlayerScores(processedPlayerScores);
   };
+
+  useEffect(() => {
+    fetchPlayers();
+    fetchScores();
+
+    const playerSubscription = supabase
+      .channel("players")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "players" },
+        fetchPlayers,
+      )
+      .subscribe();
+
+    const scoreSubscription = supabase
+      .channel("scores")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "scores" },
+        fetchScores,
+      )
+      .subscribe();
+
+    return () => {
+      playerSubscription.unsubscribe();
+      scoreSubscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const teams = new Set(
+      players
+        .filter(
+          (player): player is Player & { team: number } => player.team !== null,
+        )
+        .map((player) => player.team),
+    );
+    setTeamsWithPlayers(teams);
+  }, [players]);
 
   const addPlayer = async () => {
     const { data, error } = await supabase
