@@ -26,17 +26,13 @@ const getTeamColor = (teamNumber: number) => {
 };
 
 interface PlayerGridProps {
+  year: number;
   players: Player[];
   newPlayerName: string;
   setNewPlayerName: (name: string) => void;
   isAddPlayerDialogOpen: boolean;
   setIsAddPlayerDialogOpen: (isOpen: boolean) => void;
-  playerToDelete: Player | null;
-  setPlayerToDelete: (player: Player | null) => void;
-  isDeletePlayerDialogOpen: boolean;
-  setIsDeletePlayerDialogOpen: (isOpen: boolean) => void;
   addPlayer: () => void;
-  deletePlayer: () => void;
   updatePlayerScore: (uuid: string, score: number) => void;
   randomizeTeams: (teamCount: number) => void;
   resetPlayerTeam: (uuid: string) => void;
@@ -48,17 +44,13 @@ interface PlayerGridProps {
 }
 
 export function PlayerGrid({
+  year,
   players,
   newPlayerName,
   setNewPlayerName,
   isAddPlayerDialogOpen,
   setIsAddPlayerDialogOpen,
-  playerToDelete,
-  setPlayerToDelete,
-  isDeletePlayerDialogOpen,
-  setIsDeletePlayerDialogOpen,
   addPlayer,
-  deletePlayer,
   updatePlayerScore,
   randomizeTeams,
   resetPlayerTeam,
@@ -71,6 +63,7 @@ export function PlayerGrid({
   return (
     <div className="container mx-auto px-4 py-4">
       <h2 className="text-3xl font-bold mb-8 text-center">Teams</h2>
+      <h3 className="text-lg font-bold mb-4 text-center">Year: {year}</h3>
       <div className="flex flex-col md:flex-row justify-center space-y-2 md:space-y-0 md:space-x-4 mb-8">
         <Button onClick={() => randomizeTeams(2)}>
           Randomize into 2 teams
@@ -125,8 +118,6 @@ export function PlayerGrid({
                   player={player}
                   updatePlayerScore={updatePlayerScore}
                   resetPlayerTeam={resetPlayerTeam}
-                  setPlayerToDelete={setPlayerToDelete}
-                  setIsDeletePlayerDialogOpen={setIsDeletePlayerDialogOpen}
                 />
               ))}
           </div>
@@ -163,8 +154,6 @@ export function PlayerGrid({
                       player={player}
                       updatePlayerScore={updatePlayerScore}
                       resetPlayerTeam={resetPlayerTeam}
-                      setPlayerToDelete={setPlayerToDelete}
-                      setIsDeletePlayerDialogOpen={setIsDeletePlayerDialogOpen}
                     />
                   ))}
               </div>
@@ -179,32 +168,6 @@ export function PlayerGrid({
           );
         })}
       </div>
-      <Dialog
-        open={isDeletePlayerDialogOpen}
-        onOpenChange={setIsDeletePlayerDialogOpen}
-      >
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Delete Player</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete {playerToDelete?.name}? This
-              action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDeletePlayerDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={deletePlayer}>
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       <div className="mt-8 mb-8 flex justify-center">
         <TooltipProvider>
           <Tooltip>

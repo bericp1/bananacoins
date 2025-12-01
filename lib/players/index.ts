@@ -3,6 +3,4 @@ export type Player = {
   name: string;
   team: number | null;
   score: number;
-  created_at: string;
-  updated_at: string;
 };

@@ -6,8 +6,6 @@ export type StaticCup = {
 
 export type Cup = StaticCup & {
   round: number | null;
-  created_at: string;
-  updated_at: string;
 };
 
 export const cups: StaticCup[] = [

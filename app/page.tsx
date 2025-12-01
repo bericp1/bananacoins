@@ -7,19 +7,16 @@ import { useCups } from "@/hooks/cups/useCups";
 import Hero from "@/components/hero/Hero";
 
 export default function Home() {
+  const year = new Date().getFullYear();
+
   const {
     players,
     newPlayerName,
     setNewPlayerName,
     isAddPlayerDialogOpen,
     setIsAddPlayerDialogOpen,
-    playerToDelete,
-    setPlayerToDelete,
-    isDeletePlayerDialogOpen,
-    setIsDeletePlayerDialogOpen,
     playerScores,
     addPlayer,
-    deletePlayer,
     updatePlayerScore,
     randomizeTeams,
     resetPlayerTeam,
@@ -28,7 +25,7 @@ export default function Home() {
     confirmAndSaveScores,
     areAllTeamScoresValid,
     teamsWithPlayers,
-  } = usePlayersAndScores();
+  } = usePlayersAndScores({ year });
 
   const {
     cups,
@@ -45,7 +42,7 @@ export default function Home() {
     confirmAssignCup,
     confirmResetCup,
     resetAllCups,
-  } = useCups();
+  } = useCups({ year });
 
   return (
     <>
@@ -58,6 +55,7 @@ export default function Home() {
       </div>
       <hr className="my-8 border-t border-gray-300" />
       <CupGrid
+        year={year}
         cups={cups}
         isResetDialogOpen={isResetDialogOpen}
         setIsResetDialogOpen={setIsResetDialogOpen}
@@ -75,17 +73,13 @@ export default function Home() {
       />
       <hr className="my-8 border-t border-gray-300" />
       <PlayerGrid
+        year={year}
         players={players}
         newPlayerName={newPlayerName}
         setNewPlayerName={setNewPlayerName}
         isAddPlayerDialogOpen={isAddPlayerDialogOpen}
         setIsAddPlayerDialogOpen={setIsAddPlayerDialogOpen}
-        playerToDelete={playerToDelete}
-        setPlayerToDelete={setPlayerToDelete}
-        isDeletePlayerDialogOpen={isDeletePlayerDialogOpen}
-        setIsDeletePlayerDialogOpen={setIsDeletePlayerDialogOpen}
         addPlayer={addPlayer}
-        deletePlayer={deletePlayer}
         updatePlayerScore={updatePlayerScore}
         randomizeTeams={randomizeTeams}
         resetPlayerTeam={resetPlayerTeam}
@@ -96,7 +90,7 @@ export default function Home() {
         teamsWithPlayers={teamsWithPlayers}
       />
       <hr className="my-8 border-t border-gray-300" />
-      <ScoreGrid playerScores={playerScores} cups={cups} />
+      <ScoreGrid year={year} playerScores={playerScores} cups={cups} />
     </>
   );
 }

@@ -38,6 +38,7 @@ const PulsingBorderStyle = () => (
 );
 
 interface CupGridProps {
+  year: number;
   cups: Cup[];
   isResetDialogOpen: boolean;
   setIsResetDialogOpen: (isOpen: boolean) => void;
@@ -55,6 +56,7 @@ interface CupGridProps {
 }
 
 export function CupGrid({
+  year,
   cups,
   isResetDialogOpen,
   setIsResetDialogOpen,
@@ -77,6 +79,7 @@ export function CupGrid({
       <PulsingBorderStyle />
       <div className="container mx-auto px-4 py-4">
         <h2 className="text-3xl font-bold mb-4 text-center">Cups</h2>
+        <h3 className="text-lg font-bold mb-4 text-center">Year: {year}</h3>
         <div className="flex justify-center mb-8">
           <TooltipProvider>
             <Tooltip>

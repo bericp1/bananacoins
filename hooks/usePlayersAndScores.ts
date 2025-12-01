@@ -4,13 +4,12 @@ import { supabase } from "@/lib/supabase";
 import { Player } from "@/lib/players";
 import { Score, PlayerScore } from "@/lib/scores";
 
-export function usePlayersAndScores() {
+export function usePlayersAndScores({
+  year = new Date().getFullYear(),
+}: { year?: number } = {}) {
   const [players, setPlayers] = useState<Player[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
   const [isAddPlayerDialogOpen, setIsAddPlayerDialogOpen] = useState(false);
-  const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
-  const [isDeletePlayerDialogOpen, setIsDeletePlayerDialogOpen] =
-    useState(false);
   const [playerScores, setPlayerScores] = useState<PlayerScore[]>([]);
   const [teamsWithPlayers, setTeamsWithPlayers] = useState<Set<number>>(
     new Set(),
@@ -34,7 +33,8 @@ export function usePlayersAndScores() {
   const fetchScores = async () => {
     const { data: scoresData, error: scoresError } = await supabase
       .from("scores")
-      .select("*");
+      .select("*")
+      .eq("year", year);
 
     if (scoresError) {
       console.error("Error fetching scores:", scoresError);
@@ -145,25 +145,6 @@ export function usePlayersAndScores() {
     }
     setNewPlayerName("");
     setIsAddPlayerDialogOpen(false);
-  };
-
-  const deletePlayer = async () => {
-    if (!playerToDelete) return;
-
-    const { error } = await supabase
-      .from("players")
-      .delete()
-      .eq("uuid", playerToDelete.uuid);
-
-    if (error) {
-      console.error("Error deleting player:", error);
-    } else {
-      setPlayers((prev) =>
-        prev.filter((player) => player.uuid !== playerToDelete.uuid),
-      );
-    }
-    setPlayerToDelete(null);
-    setIsDeletePlayerDialogOpen(false);
   };
 
   const updatePlayerScore = async (uuid: string, score: number) => {
@@ -332,13 +313,8 @@ export function usePlayersAndScores() {
     setNewPlayerName,
     isAddPlayerDialogOpen,
     setIsAddPlayerDialogOpen,
-    playerToDelete,
-    setPlayerToDelete,
-    isDeletePlayerDialogOpen,
-    setIsDeletePlayerDialogOpen,
     playerScores,
     addPlayer,
-    deletePlayer,
     updatePlayerScore,
     randomizeTeams,
     resetPlayerTeam,

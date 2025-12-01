@@ -4,29 +4,19 @@ import { useState } from "react";
 import { Player } from "@/lib/players";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserMinus } from "lucide-react";
 
 interface PlayerCardProps {
   player: Player;
   updatePlayerScore: (uuid: string, score: number) => void;
   resetPlayerTeam: (uuid: string) => void;
-  setPlayerToDelete: (player: Player) => void;
-  setIsDeletePlayerDialogOpen: (isOpen: boolean) => void;
 }
 
 function PlayerCardInner({
   player,
   updatePlayerScore,
   resetPlayerTeam,
-  setPlayerToDelete,
-  setIsDeletePlayerDialogOpen,
 }: PlayerCardProps) {
   const [localScore, setLocalScore] = useState(player.score.toString());
   const [isValid, setIsValid] = useState(true);
@@ -90,21 +80,6 @@ function PlayerCardInner({
             className={`w-full mb-2 text-sm ${!isValid ? "border-red-500 focus:ring-red-500" : ""}`}
           />
         </CardContent>
-      )}
-      {player.team === null && (
-        <CardFooter className="p-3">
-          <Button
-            variant="destructive"
-            size="sm"
-            className="w-full text-xs"
-            onClick={() => {
-              setPlayerToDelete(player);
-              setIsDeletePlayerDialogOpen(true);
-            }}
-          >
-            Delete
-          </Button>
-        </CardFooter>
       )}
     </Card>
   );
