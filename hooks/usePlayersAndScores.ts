@@ -238,6 +238,7 @@ export function usePlayersAndScores({
     const { data: maxRoundData, error: maxRoundError } = await supabase
       .from("scores")
       .select("round")
+      .eq("year", year)
       .order("round", { ascending: false })
       .limit(1);
 
