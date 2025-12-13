@@ -13,7 +13,7 @@ export function useScoreComparisons({
   selectedYear: number;
   availableYears: number[];
 }) {
-  const [comparisonMode, setComparisonMode] = useState<ComparisonMode>("cup");
+  const [comparisonMode, setComparisonMode] = useState<ComparisonMode>("round");
   const [previousYearScores, setPreviousYearScores] = useState<PlayerScore[]>(
     [],
   );

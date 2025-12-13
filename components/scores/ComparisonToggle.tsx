@@ -23,17 +23,6 @@ export function ComparisonToggle({
         Comparisons anchored to:
       </div>
       <div className="inline-flex rounded-lg border border-gray-300 overflow-hidden">
-        <Button
-          onClick={() => onModeChange("cup")}
-          variant={comparisonMode === "cup" ? "default" : "ghost"}
-          className={`rounded-none border-0 ${
-            comparisonMode === "cup"
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-white hover:bg-gray-100"
-          }`}
-        >
-          Cup
-        </Button>
         <div className="w-px bg-gray-300" />
         <Button
           onClick={() => onModeChange("round")}
@@ -45,6 +34,17 @@ export function ComparisonToggle({
           }`}
         >
           Round
+        </Button>
+        <Button
+          onClick={() => onModeChange("cup")}
+          variant={comparisonMode === "cup" ? "default" : "ghost"}
+          className={`rounded-none border-0 ${
+            comparisonMode === "cup"
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-white hover:bg-gray-100"
+          }`}
+        >
+          Cup
         </Button>
       </div>
     </div>
