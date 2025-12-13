@@ -6,6 +6,7 @@ import { ScoreGrid } from "@/components/scores/ScoreGrid";
 import { YearSelector } from "@/components/scores/YearSelector";
 import { usePlayersAndScores } from "@/hooks/usePlayersAndScores";
 import { useCups } from "@/hooks/cups/useCups";
+import { useScoreComparisons } from "@/hooks/scores/useScoreComparisons";
 import Hero from "@/components/hero/Hero";
 import { supabase } from "@/lib/supabase";
 
@@ -76,6 +77,14 @@ export default function Home() {
     resetAllCups,
   } = useCups({ year: selectedYear });
 
+  const {
+    comparisonMode,
+    setComparisonMode,
+    previousYearScores,
+    previousYearCups,
+    hasPreviousYear,
+  } = useScoreComparisons({ selectedYear, availableYears });
+
   return (
     <>
       <Hero />
@@ -131,6 +140,11 @@ export default function Home() {
         key={`score-grid-${selectedYear}`}
         playerScores={playerScores}
         cups={cups}
+        comparisonMode={comparisonMode}
+        setComparisonMode={setComparisonMode}
+        previousYearScores={previousYearScores}
+        previousYearCups={previousYearCups}
+        hasPreviousYear={hasPreviousYear}
       />
     </>
   );

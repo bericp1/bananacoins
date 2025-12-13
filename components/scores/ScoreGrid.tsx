@@ -1,4 +1,5 @@
 "use client";
+import type { ReactElement } from "react";
 import {
   Table,
   TableBody,
@@ -15,10 +16,17 @@ import {
 } from "@tanstack/react-table";
 import { PlayerScore } from "@/lib/scores";
 import { Cup } from "@/lib/cups";
+import { ComparisonMode } from "@/hooks/scores/useScoreComparisons";
+import { ComparisonToggle } from "./ComparisonToggle";
 
 interface ScoreGridProps {
   playerScores: PlayerScore[];
   cups: Cup[];
+  comparisonMode: ComparisonMode;
+  setComparisonMode: (mode: ComparisonMode) => void;
+  previousYearScores: PlayerScore[];
+  previousYearCups: Cup[];
+  hasPreviousYear: boolean;
 }
 
 const getMedalEmoji = (place: number) => {
@@ -34,7 +42,15 @@ const getMedalEmoji = (place: number) => {
   }
 };
 
-export function ScoreGrid({ playerScores, cups }: ScoreGridProps) {
+export function ScoreGrid({
+  playerScores,
+  cups,
+  comparisonMode,
+  setComparisonMode,
+  previousYearScores,
+  previousYearCups,
+  hasPreviousYear,
+}: ScoreGridProps) {
   const rounds =
     playerScores.length > 0
       ? Math.max(
@@ -45,6 +61,49 @@ export function ScoreGrid({ playerScores, cups }: ScoreGridProps) {
   const getTopThreeScores = (roundScores: number[]): number[] => {
     const sortedScores = [...new Set(roundScores)].sort((a, b) => b - a);
     return sortedScores.slice(0, 3);
+  };
+
+  const getPreviousYearScore = (
+    playerUuid: string,
+    currentRound: number,
+  ): number | undefined => {
+    const previousPlayer = previousYearScores.find(
+      (p) => p.uuid === playerUuid,
+    );
+    if (!previousPlayer) return undefined;
+
+    if (comparisonMode === "round") {
+      return previousPlayer.scores[currentRound];
+    } else {
+      const currentCup = cups.find((c) => c.round === currentRound);
+      if (!currentCup) return undefined;
+
+      const previousRound = previousYearCups.find(
+        (c) => c.cup === currentCup.cup,
+      )?.round;
+      if (!previousRound) return undefined;
+
+      return previousPlayer.scores[previousRound];
+    }
+  };
+
+  const getComparisonIndicator = (
+    currentScore: number,
+    previousScore: number | undefined,
+  ): ReactElement | null => {
+    if (!hasPreviousYear || previousScore === undefined) return null;
+
+    const diff = currentScore - previousScore;
+    if (Math.abs(diff) < 0.01) return null;
+
+    const color = diff > 0 ? "text-green-600" : "text-red-600";
+    const arrow = diff > 0 ? "↑" : "↓";
+
+    return (
+      <span className={`text-xs ${color} font-semibold ml-1`}>
+        {arrow} {Math.abs(diff).toFixed(2)}
+      </span>
+    );
   };
 
   const columns: ColumnDef<PlayerScore>[] = [
@@ -109,12 +168,23 @@ export function ScoreGrid({ playerScores, cups }: ScoreGridProps) {
           const topThreeScores = getTopThreeScores(allScoresForRound);
           const place = topThreeScores.indexOf(score) + 1;
 
+          const previousScore = getPreviousYearScore(row.original.uuid, round);
+          const comparisonIndicator = getComparisonIndicator(
+            score,
+            previousScore,
+          );
+
           return (
             <div className="text-center">
-              {score.toFixed(2)}{" "}
-              <span className="scale-[1.6] inline-block transition-transform">
-                {getMedalEmoji(place)}
-              </span>
+              <div>
+                {score.toFixed(2)}{" "}
+                <span className="scale-[1.6] inline-block transition-transform">
+                  {getMedalEmoji(place)}
+                </span>
+              </div>
+              {comparisonIndicator && (
+                <div className="mt-0.5">{comparisonIndicator}</div>
+              )}
             </div>
           );
         },
@@ -139,6 +209,11 @@ export function ScoreGrid({ playerScores, cups }: ScoreGridProps) {
   return (
     <div className="container mx-auto px-4 pt-4 pb-64">
       <h2 className="text-3xl font-bold mb-8 text-center">Scores</h2>
+      <ComparisonToggle
+        comparisonMode={comparisonMode}
+        onModeChange={setComparisonMode}
+        disabled={!hasPreviousYear}
+      />
       <div className="w-full overflow-x-auto">
         <div className="inline-block min-w-full">
           <Table className="w-full border-collapse">
