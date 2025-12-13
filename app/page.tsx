@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { CupGrid } from "@/components/cups/CupGrid";
 import { PlayerGrid } from "@/components/players/PlayerGrid";
 import { ScoreGrid } from "@/components/scores/ScoreGrid";
+import { ProgressionGraph } from "@/components/scores/ProgressionGraph";
 import { YearSelector } from "@/components/scores/YearSelector";
 import { usePlayersAndScores } from "@/hooks/usePlayersAndScores";
 import { useCups } from "@/hooks/cups/useCups";
@@ -146,6 +147,8 @@ export default function Home() {
         previousYearCups={previousYearCups}
         hasPreviousYear={hasPreviousYear}
       />
+      <hr className="my-8 border-t border-gray-300" />
+      <ProgressionGraph playerScores={playerScores} cups={cups} />
     </>
   );
 }

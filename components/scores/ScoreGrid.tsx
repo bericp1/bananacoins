@@ -207,7 +207,7 @@ export function ScoreGrid({
   });
 
   return (
-    <div className="container mx-auto px-4 pt-4 pb-64">
+    <div className="container mx-auto px-4 py-4">
       <h2 className="text-3xl font-bold mb-8 text-center">Scores</h2>
       <ComparisonToggle
         comparisonMode={comparisonMode}
