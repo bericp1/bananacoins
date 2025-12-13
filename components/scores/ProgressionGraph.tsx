@@ -45,6 +45,71 @@ const getMedalEmoji = (place: number) => {
   }
 };
 
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  label?: string;
+  viewMode: ViewMode;
+}
+
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+  viewMode,
+}: CustomTooltipProps) => {
+  if (!active || !payload || !payload.length) return null;
+
+  const sortedPayload = [...payload].sort((a, b) => {
+    if (viewMode === "place") {
+      return (a.value || Infinity) - (b.value || Infinity);
+    } else {
+      return (b.value || 0) - (a.value || 0);
+    }
+  });
+
+  return (
+    <div
+      style={{
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
+        border: "1px solid #ccc",
+        borderRadius: "4px",
+        padding: "10px",
+      }}
+    >
+      <p style={{ marginBottom: "8px", fontWeight: "600" }}>{label}</p>
+      {sortedPayload.map((entry, index: number) => {
+        let medal = "";
+        if (viewMode === "place" && entry.value <= 3) {
+          medal = getMedalEmoji(entry.value);
+        } else if (viewMode === "score" && index < 3) {
+          medal = getMedalEmoji(index + 1);
+        }
+
+        return (
+          <p
+            key={index}
+            style={{
+              color: entry.color,
+              margin: "4px 0",
+            }}
+          >
+            {medal && `${medal} `}
+            {entry.name} :{" "}
+            {typeof entry.value === "number"
+              ? entry.value.toFixed(2)
+              : entry.value}
+          </p>
+        );
+      })}
+    </div>
+  );
+};
+
 export function ProgressionGraph({
   playerScores,
   cups,
@@ -73,20 +138,36 @@ export function ProgressionGraph({
     return null;
   }
 
-  const calculatePlaceForRound = (
+  const calculatePlaceByCumulativeAverage = (
     round: number,
     playerUuid: string,
   ): number | null => {
-    const scoresForRound = playerScores
+    const playersWithCumulativeAvg = playerScores
       .map((p) => ({
         uuid: p.uuid,
-        score: p.scores[round],
+        cumulativeAvg: getCumulativeAverage(p, round),
       }))
-      .filter((p) => p.score !== undefined)
-      .sort((a, b) => (b.score || 0) - (a.score || 0));
+      .filter((p) => p.cumulativeAvg !== null)
+      .sort((a, b) => (b.cumulativeAvg || 0) - (a.cumulativeAvg || 0));
 
-    const playerIndex = scoresForRound.findIndex((p) => p.uuid === playerUuid);
+    const playerIndex = playersWithCumulativeAvg.findIndex(
+      (p) => p.uuid === playerUuid,
+    );
     return playerIndex >= 0 ? playerIndex + 1 : null;
+  };
+
+  const getCumulativeAverage = (
+    player: PlayerScore,
+    upToRound: number,
+  ): number | null => {
+    const scoresUpToRound = [];
+    for (let r = 1; r <= upToRound; r++) {
+      if (player.scores[r] !== undefined) {
+        scoresUpToRound.push(player.scores[r]);
+      }
+    }
+    if (scoresUpToRound.length === 0) return null;
+    return scoresUpToRound.reduce((a, b) => a + b, 0) / scoresUpToRound.length;
   };
 
   const graphData = Array.from({ length: rounds }, (_, i) => {
@@ -101,9 +182,12 @@ export function ProgressionGraph({
       const score = player.scores[round];
       if (score !== undefined) {
         if (viewMode === "place") {
-          dataPoint[player.name] = calculatePlaceForRound(round, player.uuid);
+          dataPoint[player.name] = calculatePlaceByCumulativeAverage(
+            round,
+            player.uuid,
+          );
         } else {
-          dataPoint[player.name] = score;
+          dataPoint[player.name] = getCumulativeAverage(player, round);
         }
       } else {
         dataPoint[player.name] = null;
@@ -122,9 +206,11 @@ export function ProgressionGraph({
   const maxPlace = Math.max(6, activePlayers.length);
   const placeTicks = Array.from({ length: maxPlace }, (_, i) => i + 1);
 
+  const minWidth = Math.max(600, rounds * 120);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const CustomDot = (props: any) => {
-    const { cx, cy, payload, index, dataKey } = props;
+    const { cx, cy, index, dataKey } = props;
 
     if (index !== graphData.length - 1) {
       return (
@@ -141,7 +227,9 @@ export function ProgressionGraph({
 
     const playerUuid =
       activePlayers.find((p) => p.name === dataKey)?.uuid || "";
-    const place = calculatePlaceForRound(rounds, playerUuid);
+
+    // Both modes now use cumulative average for final ranking
+    const place = calculatePlaceByCumulativeAverage(rounds, playerUuid);
     const medal = place ? getMedalEmoji(place) : "";
     const playerName = dataKey;
 
@@ -178,8 +266,12 @@ export function ProgressionGraph({
         Player Progression
       </h2>
 
+      <h3 className="text-md font-medium mb-6 text-center">
+        Using cumulative average score at each round.
+      </h3>
+
       <div className="flex flex-col items-center gap-2 mb-6">
-        <div className="text-sm font-medium text-gray-700">View by:</div>
+        <div className="text-sm font-medium text-gray-700">Scale:</div>
         <div className="inline-flex rounded-lg border border-gray-300 overflow-hidden">
           <Button
             onClick={() => setViewMode("place")}
@@ -207,65 +299,65 @@ export function ProgressionGraph({
         </div>
       </div>
 
-      <div className="w-full bg-white p-4 rounded-lg border border-gray-200">
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart
-            data={graphData}
-            margin={
-              isMobile
-                ? { top: 20, right: 30, left: 20, bottom: 30 }
-                : { top: 20, right: 120, left: 20, bottom: 30 }
-            }
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="roundLabel"
-              label={{ value: "Round", position: "insideBottom", offset: -10 }}
-              interval={0}
-              tick={{ fontSize: 14 }}
-            />
-            <YAxis
-              reversed={viewMode === "place"}
-              label={{
-                value: viewMode === "place" ? "Place" : "Score",
-                angle: -90,
-                position: "insideLeft",
-              }}
-              domain={viewMode === "place" ? [1, maxPlace] : ["auto", "auto"]}
-              ticks={viewMode === "place" ? placeTicks : undefined}
-              interval={0}
-              tick={{ fontSize: 14 }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "rgba(255, 255, 255, 0.95)",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-              }}
-            />
-            {isMobile && (
-              <Legend
-                layout="horizontal"
-                align="center"
-                verticalAlign="bottom"
-                wrapperStyle={{ paddingTop: "20px" }}
-                iconType="line"
+      <div className="w-full bg-white p-4 rounded-lg border border-gray-200 overflow-x-auto">
+        <div style={{ minWidth: `${minWidth}px`, width: "100%" }}>
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart
+              data={graphData}
+              margin={
+                isMobile
+                  ? { top: 20, right: 30, left: 20, bottom: 30 }
+                  : { top: 20, right: 120, left: 20, bottom: 30 }
+              }
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="roundLabel"
+                label={{
+                  value: "Round",
+                  position: "insideBottom",
+                  offset: -10,
+                }}
+                interval={0}
+                tick={{ fontSize: 14 }}
               />
-            )}
-            {activePlayers.map((player, index) => (
-              <Line
-                key={player.uuid}
-                type="monotone"
-                dataKey={player.name}
-                stroke={PLAYER_COLORS[index % PLAYER_COLORS.length]}
-                strokeWidth={2}
-                dot={<CustomDot />}
-                activeDot={{ r: 6 }}
-                connectNulls={false}
+              <YAxis
+                reversed={viewMode === "place"}
+                label={{
+                  value: viewMode === "place" ? "Place" : "Score",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+                domain={viewMode === "place" ? [1, maxPlace] : ["auto", "auto"]}
+                ticks={viewMode === "place" ? placeTicks : undefined}
+                interval={0}
+                tick={{ fontSize: 14 }}
               />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
+              <Tooltip content={<CustomTooltip viewMode={viewMode} />} />
+              {isMobile && (
+                <Legend
+                  layout="horizontal"
+                  align="center"
+                  verticalAlign="bottom"
+                  wrapperStyle={{ paddingTop: "20px" }}
+                  iconType="line"
+                />
+              )}
+              {activePlayers.map((player, index) => (
+                <Line
+                  key={player.uuid}
+                  type="monotone"
+                  dataKey={player.name}
+                  stroke={PLAYER_COLORS[index % PLAYER_COLORS.length]}
+                  strokeWidth={2}
+                  dot={<CustomDot />}
+                  activeDot={{ r: 6 }}
+                  connectNulls={false}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
