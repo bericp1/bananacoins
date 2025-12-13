@@ -96,7 +96,7 @@ export function usePlayersAndScores({
     fetchScores();
 
     const playerSubscription = supabase
-      .channel("players")
+      .channel(`players-${year}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "players" },
@@ -105,7 +105,7 @@ export function usePlayersAndScores({
       .subscribe();
 
     const scoreSubscription = supabase
-      .channel("scores")
+      .channel(`scores-${year}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "scores" },
@@ -117,7 +117,7 @@ export function usePlayersAndScores({
       playerSubscription.unsubscribe();
       scoreSubscription.unsubscribe();
     };
-  }, []);
+  }, [year]);
 
   useEffect(() => {
     const teams = new Set(

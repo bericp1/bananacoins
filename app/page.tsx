@@ -1,13 +1,45 @@
 "use client";
+import { useState, useEffect } from "react";
 import { CupGrid } from "@/components/cups/CupGrid";
 import { PlayerGrid } from "@/components/players/PlayerGrid";
 import { ScoreGrid } from "@/components/scores/ScoreGrid";
+import { YearSelector } from "@/components/scores/YearSelector";
 import { usePlayersAndScores } from "@/hooks/usePlayersAndScores";
 import { useCups } from "@/hooks/cups/useCups";
 import Hero from "@/components/hero/Hero";
+import { supabase } from "@/lib/supabase";
 
 export default function Home() {
   const year = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(year);
+  const [availableYears, setAvailableYears] = useState<number[]>([year]);
+
+  useEffect(() => {
+    const fetchAvailableYears = async () => {
+      const { data, error } = await supabase
+        .from("scores")
+        .select("year")
+        .order("year", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching years:", error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const uniqueYears = Array.from(
+          new Set(data.map((item) => item.year)),
+        ).sort((a, b) => b - a);
+        setAvailableYears(uniqueYears);
+
+        if (!uniqueYears.includes(selectedYear)) {
+          setSelectedYear(uniqueYears[0]);
+        }
+      }
+    };
+
+    fetchAvailableYears();
+  }, [selectedYear]);
 
   const {
     players,
@@ -25,7 +57,7 @@ export default function Home() {
     confirmAndSaveScores,
     areAllTeamScoresValid,
     teamsWithPlayers,
-  } = usePlayersAndScores({ year });
+  } = usePlayersAndScores({ year: selectedYear });
 
   const {
     cups,
@@ -42,11 +74,16 @@ export default function Home() {
     confirmAssignCup,
     confirmResetCup,
     resetAllCups,
-  } = useCups({ year });
+  } = useCups({ year: selectedYear });
 
   return (
     <>
       <Hero />
+      <YearSelector
+        availableYears={availableYears}
+        selectedYear={selectedYear}
+        onYearChange={setSelectedYear}
+      />
       <div className="container mt-8 px-6 text-center mx-auto">
         <p className="font-semibold mb-8">
           <span className="text-orange-500">⚡️</span> All selections and changes
@@ -55,7 +92,7 @@ export default function Home() {
       </div>
       <hr className="my-8 border-t border-gray-300" />
       <CupGrid
-        year={year}
+        year={selectedYear}
         cups={cups}
         isResetDialogOpen={isResetDialogOpen}
         setIsResetDialogOpen={setIsResetDialogOpen}
@@ -73,7 +110,7 @@ export default function Home() {
       />
       <hr className="my-8 border-t border-gray-300" />
       <PlayerGrid
-        year={year}
+        year={selectedYear}
         players={players}
         newPlayerName={newPlayerName}
         setNewPlayerName={setNewPlayerName}
@@ -90,7 +127,11 @@ export default function Home() {
         teamsWithPlayers={teamsWithPlayers}
       />
       <hr className="my-8 border-t border-gray-300" />
-      <ScoreGrid year={year} playerScores={playerScores} cups={cups} />
+      <ScoreGrid
+        key={`score-grid-${selectedYear}`}
+        playerScores={playerScores}
+        cups={cups}
+      />
     </>
   );
 }

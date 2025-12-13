@@ -17,7 +17,6 @@ import { PlayerScore } from "@/lib/scores";
 import { Cup } from "@/lib/cups";
 
 interface ScoreGridProps {
-  year: number;
   playerScores: PlayerScore[];
   cups: Cup[];
 }
@@ -35,7 +34,7 @@ const getMedalEmoji = (place: number) => {
   }
 };
 
-export function ScoreGrid({ year, playerScores, cups }: ScoreGridProps) {
+export function ScoreGrid({ playerScores, cups }: ScoreGridProps) {
   const rounds =
     playerScores.length > 0
       ? Math.max(
@@ -138,9 +137,8 @@ export function ScoreGrid({ year, playerScores, cups }: ScoreGridProps) {
   });
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container mx-auto px-4 pt-4 pb-64">
       <h2 className="text-3xl font-bold mb-8 text-center">Scores</h2>
-      <h3 className="text-lg font-bold mb-4 text-center">Year: {year}</h3>
       <div className="w-full overflow-x-auto">
         <div className="inline-block min-w-full">
           <Table className="w-full border-collapse">

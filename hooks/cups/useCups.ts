@@ -47,11 +47,11 @@ export function useCups({
   useEffect(() => {
     fetchCups({ year }).then((cups) => setCups(cups));
     const cupSubscription = supabase
-      .channel("cups")
+      .channel(`cups-${year}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "cups" },
-        () => fetchCups(),
+        () => fetchCups({ year }),
       )
       .subscribe();
 
