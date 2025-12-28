@@ -159,14 +159,13 @@ export function CupGrid({
                             alt={cup.name}
                             width={48}
                             height={48}
-                            className="mb-2"
                           />
-                          <span className="text-center text-sm">
-                            {cup.name}
-                          </span>
                           {isPlayed && (
-                            <span className="text-xs mt-1">
-                              Round {cup.round}
+                            <span className="text-xs mt-2 text-center">
+                              Round{" "}
+                              <span className="block md:inline">
+                                {cup.round}
+                              </span>
                             </span>
                           )}
                         </div>

@@ -280,7 +280,7 @@ export function PlayerGrid({
     <div className="container mx-auto px-4 py-4">
       <h2 className="text-3xl font-bold mb-8 text-center">Teams</h2>
       <h3 className="text-lg font-bold mb-4 text-center">Year: {year}</h3>
-      <div className="flex flex-col md:flex-row justify-center space-y-2 md:space-y-0 md:space-x-4 mb-8">
+      <div className="flex flex-col md:flex-row flex-wrap justify-center gap-2 mb-8">
         <Button onClick={() => randomizeTeams(2)}>
           Randomize into 2 teams
         </Button>
