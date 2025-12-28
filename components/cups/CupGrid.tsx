@@ -16,23 +16,37 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Image from "next/image";
+import { cupIcons } from "./cupIcons";
+import { PlayerScore } from "@/lib/scores";
 
 const pulsingBorderKeyframes = `
-  @keyframes pulse-border {
+  @keyframes pulse-border-red {
     0%, 100% {
       box-shadow: 0 0 0 0px rgba(255, 0, 0, 0.7);
     }
     50% {
       box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.7);
-    }.
+    }
+  }
+  @keyframes pulse-border-green {
+    0%, 100% {
+      box-shadow: 0 0 0 0px rgba(34, 197, 94, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.7);
+    }
   }
 `;
 
 const PulsingBorderStyle = () => (
   <style jsx global>{`
     ${pulsingBorderKeyframes}
-    .animate-pulse-border {
-      animation: pulse-border 2s infinite;
+    .animate-pulse-border-red {
+      animation: pulse-border-red 2s infinite;
+    }
+    .animate-pulse-border-green {
+      animation: pulse-border-green 2s infinite;
     }
   `}</style>
 );
@@ -40,6 +54,7 @@ const PulsingBorderStyle = () => (
 interface CupGridProps {
   year: number;
   cups: Cup[];
+  playerScores: PlayerScore[];
   isResetDialogOpen: boolean;
   setIsResetDialogOpen: (isOpen: boolean) => void;
   cupToReset: Cup | null;
@@ -58,6 +73,7 @@ interface CupGridProps {
 export function CupGrid({
   year,
   cups,
+  playerScores,
   isResetDialogOpen,
   setIsResetDialogOpen,
   cupToReset,
@@ -73,6 +89,13 @@ export function CupGrid({
   resetAllCups,
 }: CupGridProps) {
   const maxRound = Math.max(...cups.map((cup) => cup.round || 0));
+
+  const cupHasScores = (cup: Cup): boolean => {
+    if (cup.round === null) return false;
+    return playerScores.some(
+      (player) => player.scores[cup.round!] !== undefined,
+    );
+  };
 
   return (
     <>
@@ -108,19 +131,36 @@ export function CupGrid({
               {cups.map((cup) => {
                 const isPlayed = cup.round !== null;
                 const isActive = cup.round === maxRound;
+                const hasScores = cupHasScores(cup);
+                const isActiveWithScores = isActive && hasScores;
+                const isActiveWithoutScores = isActive && !hasScores;
+                const isNonActiveWithScores = !isActive && hasScores;
                 return (
                   <TooltipProvider key={cup.cup}>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div
                           className={`
-                            p-4 rounded-lg flex flex-col items-center justify-center cursor-pointer h-28
+                            p-4 rounded-lg flex flex-col items-center justify-center cursor-pointer h-28 relative
                             ${isPlayed ? "bg-white" : "bg-gray-200 opacity-50"}
-                            ${isActive ? "animate-pulse-border" : ""}
+                            ${isActiveWithScores ? "border-2 border-green-500 animate-pulse-border-green" : ""}
+                            ${isNonActiveWithScores ? "border-2 border-green-500" : ""}
+                            ${isActiveWithoutScores ? "animate-pulse-border-red" : ""}
                           `}
                           onClick={() => toggleCup(cup)}
                         >
-                          <span className="text-4xl mb-2">{cup.icon}</span>
+                          {hasScores && (
+                            <span className="absolute top-1 right-1 text-lg">
+                              ✅
+                            </span>
+                          )}
+                          <Image
+                            src={cupIcons[cup.cup]}
+                            alt={cup.name}
+                            width={48}
+                            height={48}
+                            className="mb-2"
+                          />
                           <span className="text-center text-sm">
                             {cup.name}
                           </span>

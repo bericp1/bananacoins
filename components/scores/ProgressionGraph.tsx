@@ -175,7 +175,7 @@ export function ProgressionGraph({
     const cupForRound = cups.find((c) => c.round === round);
     const dataPoint: { [key: string]: string | number | null } = {
       round,
-      roundLabel: cupForRound ? `${cupForRound.icon}` : `R${round}`,
+      roundLabel: cupForRound ? cupForRound.name : `R${round}`,
     };
 
     playerScores.forEach((player) => {

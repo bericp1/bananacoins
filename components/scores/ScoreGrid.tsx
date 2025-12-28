@@ -18,6 +18,8 @@ import { PlayerScore } from "@/lib/scores";
 import { Cup } from "@/lib/cups";
 import { ComparisonMode } from "@/hooks/scores/useScoreComparisons";
 import { ComparisonToggle } from "./ComparisonToggle";
+import Image from "next/image";
+import { cupIcons } from "@/components/cups/cupIcons";
 
 interface ScoreGridProps {
   playerScores: PlayerScore[];
@@ -152,7 +154,13 @@ export function ScoreGrid({
             <div className="flex flex-col items-center">
               <span>Round {round}</span>
               {cupForRound && (
-                <span className="text-2xl">{cupForRound.icon}</span>
+                <Image
+                  src={cupIcons[cupForRound.cup]}
+                  alt={cupForRound.name}
+                  width={32}
+                  height={32}
+                  className="mt-1"
+                />
               )}
             </div>
           );

@@ -104,6 +104,7 @@ export default function Home() {
       <CupGrid
         year={selectedYear}
         cups={cups}
+        playerScores={playerScores}
         isResetDialogOpen={isResetDialogOpen}
         setIsResetDialogOpen={setIsResetDialogOpen}
         cupToReset={cupToReset}

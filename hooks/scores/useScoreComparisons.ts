@@ -93,7 +93,7 @@ export function useScoreComparisons({
       const mappedCups: Cup[] = (cupsData || []).map((dbCup) => {
         const staticCup = staticCups.find((c) => c.cup === dbCup.cup);
         return {
-          ...(staticCup || { name: "", cup: dbCup.cup, icon: "" }),
+          ...(staticCup || { name: "", cup: dbCup.cup }),
           round: dbCup.round,
         };
       });

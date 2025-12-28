@@ -1,7 +1,6 @@
 export type StaticCup = {
   name: string;
   cup: string;
-  icon: string;
 };
 
 export type Cup = StaticCup & {
@@ -9,28 +8,28 @@ export type Cup = StaticCup & {
 };
 
 export const cups: StaticCup[] = [
-  { name: "Mushroom Cup", cup: "mushroom", icon: "🍄" },
-  { name: "Flower Cup", cup: "flower", icon: "🌸" },
-  { name: "Star Cup", cup: "star", icon: "⭐" },
-  { name: "Special Cup", cup: "special", icon: "👑" },
-  { name: "Shell Cup", cup: "shell", icon: "🐢" },
-  { name: "Banana Cup", cup: "banana", icon: "🍌" },
-  { name: "Leaf Cup", cup: "leaf", icon: "🍃" },
-  { name: "Lightning Cup", cup: "lightning", icon: "⚡" },
-  { name: "Egg Cup", cup: "egg", icon: "🥚" },
-  { name: "Triforce Cup", cup: "triforce", icon: "🔺" },
-  { name: "Crossing Cup", cup: "crossing", icon: "🍃" },
-  { name: "Bell Cup", cup: "bell", icon: "🔔" },
-  { name: "Golden Dash Cup", cup: "golden-dash", icon: "🍄" },
-  { name: "Lucky Cat Cup", cup: "lucky-cat", icon: "🐱" },
-  { name: "Turnip Cup", cup: "turnip", icon: "🥕" },
-  { name: "Propeller Cup", cup: "propeller", icon: "✈️" },
-  { name: "Rock Cup", cup: "rock", icon: "🪨" },
-  { name: "Moon Cup", cup: "moon", icon: "🌙" },
-  { name: "Fruit Cup", cup: "fruit", icon: "🍑" },
-  { name: "Boomerang Cup", cup: "boomerang", icon: "🪃" },
-  { name: "Feather Cup", cup: "feather", icon: "🪶" },
-  { name: "Cherry Cup", cup: "cherry", icon: "🍒" },
-  { name: "Acorn Cup", cup: "acorn", icon: "🌰" },
-  { name: "Spiny Cup", cup: "spiny", icon: "🦔" },
+  { name: "Mushroom Cup", cup: "mushroom" },
+  { name: "Flower Cup", cup: "flower" },
+  { name: "Star Cup", cup: "star" },
+  { name: "Special Cup", cup: "special" },
+  { name: "Egg Cup", cup: "egg" },
+  { name: "Crossing Cup", cup: "crossing" },
+  { name: "Shell Cup", cup: "shell" },
+  { name: "Banana Cup", cup: "banana" },
+  { name: "Leaf Cup", cup: "leaf" },
+  { name: "Lightning Cup", cup: "lightning" },
+  { name: "Triforce Cup", cup: "triforce" },
+  { name: "Bell Cup", cup: "bell" },
+  { name: "Golden Dash Cup", cup: "golden-dash" },
+  { name: "Lucky Cat Cup", cup: "lucky-cat" },
+  { name: "Turnip Cup", cup: "turnip" },
+  { name: "Propeller Cup", cup: "propeller" },
+  { name: "Rock Cup", cup: "rock" },
+  { name: "Moon Cup", cup: "moon" },
+  { name: "Fruit Cup", cup: "fruit" },
+  { name: "Boomerang Cup", cup: "boomerang" },
+  { name: "Feather Cup", cup: "feather" },
+  { name: "Cherry Cup", cup: "cherry" },
+  { name: "Acorn Cup", cup: "acorn" },
+  { name: "Spiny Cup", cup: "spiny" },
 ];
